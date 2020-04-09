@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<pwspanel>
+			<general_settings>
+				<enable>1</enable>
+				<route>projects.html</route>
+				<url_prefix>panel</url_prefix>
+				<url_suffix>.html</url_suffix>
+				<enable_menu>1</enable_menu>
+				<enable_search>1</enable_search>
+			</general_settings>
+			<product_view_page>
+				<enable_panel_info>1</enable_panel_info>
+				<panel_layout_listing>0</panel_layout_listing>
+				<show_panel_text>1</show_panel_text>
+				<show_panel_description>0</show_panel_description>
+				<panel_text>Projects: </panel_text>
+				<show_panel_image>1</show_panel_image>
+				<show_panel_name>1</show_panel_name>
+			</product_view_page>
+			<panel_list_page>
+				<layout>grid</layout>
+				<show_panel_name>0</show_panel_name>
+				<item_per_page>8</item_per_page>
+				<page_title>All Projects</page_title>
+				<meta_description>All Projects</meta_description>
+				<meta_keywords>perfect panel</meta_keywords>
+				<lg_column_item>4</lg_column_item>
+				<md_column_item>4</md_column_item>
+				<sm_column_item>2</sm_column_item>
+				<xs_column_item>2</xs_column_item>
+			</panel_list_page>
+			<group_page>
+				<show_panel_name>0</show_panel_name>
+				<item_per_page>12</item_per_page>
+				<lg_column_item>4</lg_column_item>
+				<md_column_item>4</md_column_item>
+				<sm_column_item>2</sm_column_item>
+				<xs_column_item>2</xs_column_item>
+			</group_page>
+			
+		</pwspanel>
+	</default>
+</config>

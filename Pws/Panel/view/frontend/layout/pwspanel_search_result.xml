@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+	<body>
+		<referenceContainer name="content">
+			<block class="Pws\Panel\Block\Search\Result" name="pwspanel.search.result">
+				<block class="Pws\Panel\Block\Toolbar" name="pwspanel_toolbar" template="Pws_Panel::toolbar.phtml">
+					<block class="Magento\Theme\Block\Html\Pager" name="panel_list_toolbar_pager"/>
+				</block>
+			</block>
+			<block class="Pws\Panel\Block\GroupList" name="group_list" template="Pws_Panel::grouplist.phtml"/>
+		</referenceContainer>
+	</body>
+</page>

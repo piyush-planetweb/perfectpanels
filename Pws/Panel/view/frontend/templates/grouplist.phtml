@@ -1,0 +1,56 @@
+<?php
+$om = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $om->create('Magento\Customer\Model\Session');
+if($customerSession->isLoggedIn()) {
+	$cusid =  $customerSession->getCustomer()->getId();
+}else{
+	$cusid= 0;
+}
+$collection = $this->getGroupList($cusid);
+?>
+<?php if ( $collection->count() ){ ?>
+<div class="block widget pws-widget panel-widget">
+	<div class="block-title">
+		<p><strong><?php echo __('My Projects') ?></strong><a style="float: right;color: black; text-decoration: underline;" href="<?php echo $this->getUrl('pwspanel/group/add'); ?>">Create New Project</a></p>
+	</div>
+	<div class="block-content">
+		<!--<ul>
+			<?php foreach ($collection as $_group) { ?>
+			<li><a href="<?php echo $_group->getUrl(); ?>" title="<?php echo $_group->getName(); ?>" ><?php echo $_group->getName(); ?></a></li>
+			<?php } ?>
+		</ul>-->
+		<table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption">Projects</caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id">Project #</th>
+                    <th scope="col" class="col total">Project Name</th>
+                    <th scope="col" class="col actions">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+				<?php foreach ($collection as $_group) { ?>
+				<tr>
+				<td data-th="Panel #" class="col id"><?php echo $_group->getId(); ?></td>
+				<td data-th="Panel Name" class="col id"><?php echo $_group->getName() ?></td>
+				<td data-th="Action" class="col id"><a href="<?php echo $this->getUrl('pwspanel/panel/add/'); ?><?php echo 'id/'.$_group->getId(); ?>" title="<?php echo $_group->getName(); ?>">Create Panel</a></td>
+				</tr>
+				<?php } ?>
+				
+			</tbody>
+        <div></div></table>
+	</div>
+<?php if($_SERVER['HTTP_REFERER'] !== NULL){ ?>
+<div class="secondary form-btn-set ml-3"><a class="btn btn-outline-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="Go back">Go Back</a></div>
+<?php } ?>
+</div>
+<?php }else{ ?>
+<div class="message info empty"><div><?php echo __('We can\'t find Projects matching the selection.'); ?></div>
+<?php if($_SERVER['HTTP_REFERER'] !== NULL){ ?>
+<div class="secondary form-btn-set ml-3"><a class="btn btn-outline-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="Go back">Go Back</a></div>
+<?php } ?>
+</div>
+<?php } ?>
+
+

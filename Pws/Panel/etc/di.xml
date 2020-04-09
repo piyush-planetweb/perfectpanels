@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Magento\Catalog\Model\Layer" type="Pws\Panel\Model\Layer" />
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="panel_listing_data_source" xsi:type="string">Pws\Panel\Model\ResourceModel\Panel\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+	<type name="Pws\Panel\Model\ResourceModel\Panel\Grid\Collection">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">pws_panel</argument>
+			<argument name="eventPrefix" xsi:type="string">pws_panel_grid_collection</argument>
+			<argument name="eventObject" xsi:type="string">panel_grid_collection</argument>
+			<argument name="resourceModel" xsi:type="string">Pws\Panel\Model\ResourceModel\Panel</argument>
+		</arguments>
+	</type>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="group_listing_data_source" xsi:type="string">Pws\Panel\Model\ResourceModel\Group\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+	<type name="Pws\Panel\Model\ResourceModel\Group\Grid\Collection">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">pws_panel_group</argument>
+			<argument name="eventPrefix" xsi:type="string">pws_panel_grid_collection</argument>
+			<argument name="eventObject" xsi:type="string">group_grid_collection</argument>
+			<argument name="resourceModel" xsi:type="string">Pws\Panel\Model\ResourceModel\Panel</argument>
+		</arguments>
+	</type>
+	
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="group_listing_data_source" xsi:type="string">Pws\Panel\Model\ResourceModel\Cutlist\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+	<type name="Pws\Panel\Model\ResourceModel\Cutlist\Grid\Collection">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">pws_cutline</argument>
+			<argument name="eventPrefix" xsi:type="string">pws_panel_grid_collection</argument>
+			<argument name="eventObject" xsi:type="string">cutlist_grid_collection</argument>
+			<argument name="resourceModel" xsi:type="string">Pws\Panel\Model\ResourceModel\Panel</argument>
+		</arguments>
+	</type>
+	
+	<type name="Pws\Panel\Model\Layer\Resolver">
+		<arguments>
+			<argument name="layersPool" xsi:type="array">
+				<item name="panel" xsi:type="string">Pws\Panel\Model\Layer\Panel</item>
+			</argument>
+		</arguments>
+	</type>
+	<type name="Pws\Panel\Model\Layer\Panel">
+		<arguments>
+			<argument name="context" xsi:type="object">Magento\Catalog\Model\Layer\Category\Context</argument>
+		</arguments>
+	</type>
+	<type name="Pws\Panel\Block\Panel\Product\ListProduct">
+		<arguments>
+			<argument name="layerResolver" xsi:type="object">Pws\Panel\Model\Layer\Resolver</argument>
+		</arguments>
+	</type>
+	<virtualType name="PanelGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+	<virtualType name="PanelGridDataProvider" type="Pws\Panel\Ui\DataProvider\Panel\PanelDataProvider">
+        <arguments>
+            <argument name="filterPool" xsi:type="object" shared="false">PanelGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GroupGridDataProvider" type="Pws\Panel\Ui\DataProvider\Panel\GroupDataProvider">
+        <arguments>
+            <argument name="filterPool" xsi:type="object" shared="false">PanelGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+	<virtualType name="CutlistGridDataProvider" type="Pws\Panel\Ui\DataProvider\Panel\CutlistDataProvider">
+        <arguments>
+            <argument name="filterPool" xsi:type="object" shared="false">PanelGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+	<virtualType name="UncutGridDataProvider" type="Pws\Panel\Ui\DataProvider\Panel\UncutDataProvider">
+        <arguments>
+            <argument name="filterPool" xsi:type="object" shared="false">PanelGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+</config>

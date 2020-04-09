@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+	<system>
+		 <tab id="pwspanel" translate="label" sortOrder="999998" class="pwspanel-tab">
+            <label>Perfect Panel Project</label>
+        </tab>
+		<section id="pwspanel" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+			<class>separator-top</class>
+			<label>Panel</label>
+			<tab>pwspanel</tab>
+			<resource>Pws_Panel::config_panel</resource>
+			<group id="general_settings" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>General Settings</label>
+				<field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>  
+
+			</group>
+			
+		</section>
+	</system>
+</config>

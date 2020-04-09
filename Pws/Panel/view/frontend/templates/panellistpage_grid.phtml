@@ -1,0 +1,256 @@
+<?php
+
+$_panelCollection = $block->getCollection();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+// Boostrap Carousel
+$itemsperpage = (int)$this->getConfig('panel_list_page/item_per_page',12);
+$lg_column_item = (int)$this->getConfig('panel_list_page/lg_column_item',6);
+$md_column_item = (int)$this->getConfig('panel_list_page/md_column_item',6);
+$sm_column_item = (int)$this->getConfig('panel_list_page/sm_column_item',4);
+$xs_column_item = (int)$this->getConfig('panel_list_page/xs_column_item',2);
+
+$show_panel_name = $this->getConfig('panel_list_page/show_panel_name');
+$lg_column = 12/$lg_column_item;
+$md_column = 12/$md_column_item;
+$sm_column = 12/$sm_column_item;
+$xs_column = 12/$xs_column_item;
+$i = 1;
+$x = 0;
+
+?>
+<div class="blue-title-sec">
+    <div class="container">              
+        <div class="row align-items-center my-address-row">
+          <div class="col-md-12 col-lg-5">
+            <h2 class="mb-0">View Project</h2>
+			<span class="greentext">Cutting costs are included in all board prices</span>
+          </div>
+          <div class="col-md-12 col-lg-7">
+          <p class="mb-0">Edit your project from here<a style="float: right;color: #fff; text-decoration: underline;" href="<?php echo $this->getUrl('panel/panel/add'); ?>">Create New Project</a></p>
+          </div>
+        </div>           
+    </div>
+</div>
+
+<?php if ( $_panelCollection->count() ){ ?>
+<?php $total = $_panelCollection->count(); ?>
+<div class="panellist">
+	<div class="block-content">
+		<table class="project-table">
+            <thead>
+                <tr>
+                    <th>Id #</th>
+                    <th>Created Date</th>
+                    <th>Project Name</th>
+					<th>File</th>
+					<th>Quote Status</th>
+                    <th>Quoted Price</th>
+					<th>Off-Cuts</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+				<?php foreach ($_panelCollection as $_panel) { ?>
+				<?php
+					if($_panel->getStatus() ==1){
+						$status = 'Enabled';
+					}else{
+						$status = 'Disabled';
+					}
+					$groupname = '';
+					$groupid = $_panel->getGroupId();
+					$offcuts = $_panel->getOffcuts();
+					$helper = $this->helper('pws\panel\Helper\Data');
+					$groupname = $helper->getGroupNameById($groupid);
+					$panelid = $_panel->getId();
+					$quotestatus =  $_panel->getQuotestatus();					
+					$quotedprice = $_panel->getQuoteprice();
+					$vatcost = $_panel->getVatcost();
+					$subtotalcost = $_panel->getSubtotalcost();					
+					
+					$image = '';
+					$image = $_panel->getImage();
+					if($quotedprice ==0){
+						$quotedpriceshow = '-';
+						$currencySymbol = '';
+					}else{
+						$quotedpriceshow = $quotedprice;
+						
+						$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+						$currencyCode = $storeManager->getStore()->getCurrentCurrencyCode();
+						$currency = $objectManager->create('Magento\Directory\Model\CurrencyFactory')->create()->load($currencyCode);
+						$currencySymbol = $currency->getCurrencySymbol(); 
+					}
+					/*if($createdstatus ==1){
+						$createdstatus = 'Enabled';
+					}else{
+						$createdstatus = 'Disabled';
+					}*/
+					/*$created = $helper->getCuttingbyPid($panelid); //cutline id = created
+					$createdstatus = $status;
+					if($created){
+						$om = \Magento\Framework\App\ObjectManager::getInstance();
+						$createdload = $om->create('Pws\Panel\Model\Cutlist')->load($created);
+						$createdstatus = $createdload->getStatus();
+						
+					}*/
+				?>
+				<tr> 
+				<td data-th="Panel #"><?php echo $_panel->getId(); ?></td>
+				<td data-th="Date"><?php $date = $_panel->getCreationTime();
+				echo date("d-m-Y", strtotime($date))?>
+				</td>
+				<td data-th="Panel Name"><?php echo $_panel->getName(); ?></td>
+				<td data-th="Statis"><?php if($image){ ?>
+                   <a target="blank" href="<?php echo $this->getUrl('pub/media').$image; ?>" title="<?php echo str_replace('panel/','',$image); ?>" download="<?php echo str_replace('panel/','',$image); ?>">Download</a>
+                   <?php } ?></td>
+				<td data-th="Statis"><?php echo $quotestatus; ?></td>
+				<td data-th="Statis">
+				<?php if($subtotalcost): ?>
+					<?php echo $currencySymbol.$subtotalcost.' + '.$currencySymbol.$vatcost.' (VAT)'; ?>
+				<?php endif; ?>
+				</td>
+				<td data-th="Statis"><?php echo $offcuts; ?></td>
+				<td data-th="Action">
+					<?php if($quotestatus == 'Created'){ ?>
+						<a href="<?php echo $this->getUrl('panel/cutting/add/id'); ?><?php echo 'id/'.$panelid; ?>#cutlist_form_quote" title="Create Cutting List"><i class="fas fa-file-medical"></i></a>
+						<a class="edit-file" href="<?php echo $this->getUrl('panel/cutting/add/id'); ?><?php echo 'id/'.$panelid; ?>" title="Edit Cutting List"><i class="far fa-edit"></i></a>
+					<?php }else{ ?>
+						<a href="<?php echo $this->getUrl('panel/cutting/add/id'); ?><?php echo 'id/'.$panelid; ?>" title="View Cutting List"><i class="far fa-file-alt"></i></a>
+					<?php if($quotedprice){ ?>
+						<form class="cart-plus" style="display: inline-block;" action="<?php echo $block->getUrl('panel/cutting/product'); ?>" id="onclickaddto-<?php echo $_panel->getId(); ?>" enctype="multipart/form-data" method="post">
+								<input type="hidden" name="price" value="<?php echo $subtotalcost; ?>" />
+								<input type="hidden" name="projectid" value="<?php echo $_panel->getId(); ?>" />
+								<a onClick='submitDetailsForm(<?php echo $_panel->getId(); ?>);' title="Add to cart" href="javascript:void(0)"><i class="fas fa-cart-plus"></i></a>
+						</form>
+					
+					<?php }} ?>
+					<a class="ml-3" href="<?php echo $this->getUrl('panel/panel/printpdf'); ?><?php echo 'id/'.$panelid; ?>" title="Print Cutting List"><i class="fas fa-file-pdf" aria-hidden="true"></i>
+</a>
+				</td>
+				
+				<?php /* ?>
+				<td data-th="Statis"><?php echo $createdstatus; ?></td>
+					<?php if($createdstatus == 'Request Sent' || $createdstatus == 'Price Quoted' || $createdstatus == 'Price Added'){ ?>
+					<?php if($createdload->getPricefull()){ ?>
+					<td data-th="Action">
+							<a href="#cutlistpopup" onclick="cuttinglist(<?php echo $created; ?>);" data-toggle="modal" title="<?php echo $_panel->getName(); ?>">View Quote</a> |
+							<form style="display: inline-block;" action="<?php echo $block->getUrl('pwspanel/cutting/product'); ?>" id="" enctype="multipart/form-data" method="post">
+								<input type="hidden" name="proid" value="<?php echo $createdload->getProid(); ?>" />
+								<input type="hidden" name="price" value="<?php echo $createdload->getPricefull(); ?>" />
+								<input type="hidden" name="cutlistid" value="<?php echo $created; ?>" />
+								<button class="get-a-quote-btn" type="submit" title="<?php echo $_panel->getName(); ?>">Add to Cart</button>
+							</form>
+							
+					</td>
+					
+					<?php }else{ ?>
+					<td data-th="Action">
+							<a href="#cutlistpopup" onclick="cuttinglist(<?php echo $created; ?>);" data-toggle="modal" title="<?php echo $_panel->getName(); ?>">View Cutting List (Quote Request Sent)</a>
+					</td>
+					
+					<?php } ?>
+					<?php }elseif($created){ ?>
+					<td data-th="Action">
+						<a href="<?php echo $this->getUrl('pwspanel/cutting/add/id'); ?><?php echo 'id/'.$panelid; ?>" title="<?php echo $_panel->getName(); ?>">Edit Cutting List</a>
+						 <!--| <a href="<?php echo $this->getUrl('pwspanel/panel/edit/id'); ?><?php echo 'id/'.$panelid; ?>" title="<?php echo $_panel->getName(); ?>">Edit Panel</a>--></td>
+					<?php }else{ ?>
+					<td data-th="Action">
+						<a href="<?php echo $this->getUrl('pwspanel/cutting/add/id'); ?><?php echo 'id/'.$panelid; ?>" title="Edit Cutting List">Edit Cutting List</a> <!--| <a href="<?php echo $this->getUrl('pwspanel/panel/edit/id'); ?><?php echo 'id/'.$panelid; ?>" title="<?php echo $_panel->getName(); ?>">Edit Panel</a>--></td>				
+					 <?php } ?>
+					 <?php */ ?>
+				</tr>
+				<?php } ?>
+				
+			</tbody>
+        <div></div></table>
+	</div>
+	
+	<?php if($html = $block->getChildHtml('toolbar')){ ?>
+	<div class="panel-toolbar toolbar toolbar-products">
+		<?php echo $html ?>
+	</div>
+	<?php } ?>
+	
+<?php if(isset($_SERVER['HTTP_REFERER'])){ ?>
+<div class="secondary form-btn-set ml-3"><a class="btn btn-outline-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="Go back">Go Back</a></div>
+<?php } ?>
+</div>
+<?php }else{ ?>
+<div class="message info empty"><div><?php echo __('We can\'t find projects matching the selection.'); ?></div></div>
+<?php if(isset($_SERVER['HTTP_REFERER'])){ ?>
+<div class="secondary form-btn-set ml-3"><a class="btn btn-outline-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="Go back">Go Back</a></div>
+<?php } ?>
+<?php } ?>
+
+<script>
+	require([
+    'jquery'
+], function ($) {
+$(document).ready(function(){
+     $('.the-class').addClass('current');
+   });  
+});
+	
+	function cuttinglist(cuttingid){
+		document.getElementById("cuttinglistdata").innerHTML='<img style="margin-left:20%;margin-top:20%;" src="<?php echo $this->getViewFileUrl('images/loader-2.gif'); ?>" />'
+	        jQuery.ajax({
+		method: "POST",
+		url: "<?php echo $block->getBaseUrl(); ?>cutlistdata.php",
+		data: { cuttingid:cuttingid}
+		})
+		.done(function( msgop ) {
+		//alert(str);
+               document.getElementById("cuttinglistdata").innerHTML= msgop;
+		});
+	}
+</script>
+<style>
+	.the-class.current{font-weight:bold; }
+</style>
+
+
+<script language="javascript" type="text/javascript">
+    function submitDetailsForm(id) {
+       jQuery("#onclickaddto-"+id).submit();
+    }
+</script>
+
+
+<div class="modal fade" id="cutlistpopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">View Cutting List</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+               <div class="col-md-12" id="cuttinglistdata">
+			   </div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+  </div>
+</div>
+<?php
+    $session = $objectManager->get('Magento\Customer\Model\Session');
+    $productsession = $session->getProductsession();
+    if(isset($_REQUEST['id']) && $_panelCollection->count()==0){
+        $productsession = $_REQUEST['id'];
+        $session->setProductsession($productsession);
+		$url = $this->getUrl('').'panel/panel/add';
+		$redirect = $objectManager->get('\Magento\Framework\App\Response\Http');
+		$redirect->setRedirect($url);
+	 }elseif(isset($_REQUEST['id'])){
+		$productsession = $_REQUEST['id'];
+        $session->setProductsession($productsession);
+	}else{     
+    
+    }
+?>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+	<menu>
+		<add id="Pws_All::pws_all" title="Perfect Panel Project Management" module="Pws_Panel" sortOrder="11" resource="Pws_All::pws_all"/> 
+		<add id="Pws_Panel::panel" title="Panel" module="Pws_Panel" sortOrder="40" resource="Pws_Panel::panel" parent="Pws_All::pws_all"/>  
+		<add id="Pws_Panel::panel_manage" title="Manage Projects" module="Pws_Panel" sortOrder="20" parent="Pws_Panel::panel" action="pwspanel/panel/index" resource="Pws_Panel::panel"/>
+		<add id="Pws_Panel::panel_cutlist_manage" title="Manage Cutlist" module="Pws_Panel" sortOrder="40" parent="Pws_Panel::panel" action="pwspanel/cutlist/index" resource="Pws_Panel::cutlist"/>
+		<add id="Pws_Panel::panel_uncut_manage" title="Manage Full Sheets" module="Pws_Panel" sortOrder="40" parent="Pws_Panel::panel" action="pwspanel/uncut/index" resource="Pws_Panel::uncut"/>
+        <add id="Pws_Panel::configuration" title="Settings" module="Pws_Panel" sortOrder="50"
+            parent="Pws_Panel::panel" action="adminhtml/system_config/edit/section/pwspanel" resource="Pws_Panel::config_panel"/>
+	</menu>
+</config>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+        <head>
+                <title>My Group</title>
+        </head>
+        <body>
+        <referenceContainer name="columns.top">
+        <container>
+            <block class="Magento\Cms\Block\Block" name="our_range_sec" >
+            <arguments>
+            <argument name="block_id" xsi:type="string">our_range_sec</argument>
+            </arguments>
+            </block>
+        </container>
+        </referenceContainer>
+            <referenceContainer name="content">
+                
+			<block class="Pws\Panel\Block\GroupList" name="group_list" template="Pws_Panel::grouplist.phtml"/>
+                <block class="Pws\Panel\Block\GroupList" name="group_list" template="Pws_Panel::grouplist.phtml"/>
+                <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="Magento_Customer::account/link/back.phtml" cacheable="false"/>
+            </referenceContainer>
+        </body>    
+</page>

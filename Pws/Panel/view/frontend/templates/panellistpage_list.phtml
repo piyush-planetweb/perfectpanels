@@ -1,0 +1,28 @@
+<?php
+$_panelCollection = $block->getCollection();
+$show_panel_name = $this->getConfig('panel_list_page/show_panel_name');
+?>
+<?php if ( $_panelCollection->count() ){ ?>
+<?php $total = $_panelCollection->getSize(); ?>
+<div class="panellist">
+	<div class="block-content">
+		<?php foreach ($_panelCollection as $_panel) { ?>
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="panel-item">
+				<div class="panel-image"><a href="<?php echo $_panel->getUrl(); ?>" title="<?php echo $_panel->getName(); ?>"><img src="<?php echo $_panel->getThumbnailUrl(); ?>" alt="<?php echo $_panel->getName(); ?>"/></a></div>
+				<?php if($show_panel_name){ ?>
+				<div class="panel-name"><a href="<?php echo $_panel->getUrl(); ?>" title="<?php echo $_panel->getName(); ?>"><?php echo $_panel->getName() ?></a></div>
+				<?php } ?>
+			</div>
+		</div>
+		<?php } ?>
+	</div>
+	<?php if($html = $block->getChildHtml('toolbar')){ ?>
+	<div class="panel-toolbar  toolbar toolbar-products">
+		<?php echo $block->getChildHtml('toolbar'); ?>
+	</div>
+	<?php } ?>
+</div>
+<?php }else{ ?>
+<div class="message info empty"><div><?php echo __('We can\'t find panel matching the selection.'); ?></div></div>
+<?php } ?>

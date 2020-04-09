@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+	<body>
+		<referenceContainer name="page.main.actions">
+            <block class="Pws\Panel\Block\Adminhtml\Menu" name="pws_panel_menu" />
+        </referenceContainer>
+		<referenceContainer name="content">
+			<block class="Pws\Panel\Block\Adminhtml\Cutlist\Edit" name="panel_edit_page"/>
+		</referenceContainer>
+		<referenceContainer name="left">
+			<block class="Pws\Panel\Block\Adminhtml\Cutlist\Edit\Tabs" name="panel_edit_tabs">
+				<block class="Pws\Panel\Block\Adminhtml\Cutlist\Edit\Tab\Main" name="panel_edit_tab_main"/>
+				<action method="addTab">
+                    <argument name="name" xsi:type="string">main_section</argument>
+                    <argument name="block" xsi:type="string">panel_edit_tab_main</argument>
+                </action>
+			</block>
+		</referenceContainer>
+	</body>
+</page>

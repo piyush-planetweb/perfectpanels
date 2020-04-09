@@ -1,0 +1,139 @@
+<?php
+    
+     $om = \Magento\Framework\App\ObjectManager::getInstance();
+    $customerSession = $om->create('Magento\Customer\Model\Session');
+    if($customerSession->isLoggedIn()) {
+        $cusid =  $customerSession->getCustomer()->getId();
+        $cusname =  $customerSession->getCustomer()->getFirstname().' '.$customerSession->getCustomer()->getLastname();
+        $cusemail =  $customerSession->getCustomer()->getEmail();
+    }else{
+        $cusid= 0;
+        $cusname = '';
+        $cusemail = '';
+        
+    }
+    $helper = $this->helper('pws\panel\Helper\Data');
+    $values = $helper->getGroupListById($cusid);
+    $proid = 0;
+    if($this->getRequest()->getParam('id')){
+          $proid = $this->getRequest()->getParam('id');;
+    };
+?>
+
+<div class="blue-title-sec">
+    <div class="container">              
+        <div class="row align-items-center my-address-row">
+          <div class="col-md-12 col-lg-5">
+            <h2 class="mb-0"><?= $block->escapeHtml(__('Create Project')) ?></h2>
+            <span class="greentext">Cutting costs are included in all board prices</span>
+          </div>
+          <div class="col-md-12 col-lg-7">
+          <p class="mb-0"><?= $block->escapeHtml(__('Please put the details of your project here')) ?></p>
+          </div>
+        </div>           
+    </div>
+</div>
+<div class="main-content-sec grey-bg-sec">
+<div class="container">
+<div class="row justify-content-center">       
+<div class="col-md-12 col-lg-8"> 
+<div class="my-address-form">
+<form class="form quickrfq"
+      action="<?php /* @escapeNotVerified */ echo $block->getFormAction(); ?>"
+      id="quickrfq_form"
+      enctype="multipart/form-data"
+      method="post"
+      data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>"
+      data-mage-init='{"validation":{}}'>
+      <input type="hidden" name="quotestatus" value="Created" />
+    <fieldset class="fieldset" style="margin-bottom: 20px;">
+        <legend class="legend"></legend><br />
+
+        <!--<div class="field panel_group_id required form-group">
+            <label for="panel_group_id"><?php /* @escapeNotVerified */ echo __('Your Panel Project:') ?><span style="color: red;">
+            <?php /* @escapeNotVerified */ echo __('*') ?></span></label>
+            <div class="control">
+                <select name="group_id">
+                   <?php if(count($values)>0){ ?>
+                   <?php foreach($values as $key=>$name){ ?>
+                   <option <?php if($proid == $key){; echo 'selected="selected"';}; ?> value="<?php echo $key; ?>"><?php echo $name; ?></option>
+                   <?php } ?>
+                   <?php } ?>
+                </select>
+            </div>
+        </div>-->
+        
+        <div class="field panel_image required form-group">
+            <label for="panel_image"><?php /* @escapeNotVerified */ echo __('Your Project Name:') ?><span style="color: red;">
+            <?php /* @escapeNotVerified */ echo __('*') ?></span></label>
+            <div class="control">
+                <input name="name" id="panel_name" title="<?php /* @escapeNotVerified */ echo __('Your Project Name:') ?>" value="" class="form-control input-text" type="text" data-validate="{required:true}"/>
+            </div>
+        </div>
+        
+        <div class="field contact_name required form-group">
+            <label for="contact_name"><?php /* @escapeNotVerified */ echo __('Upload Dxf File:') ?></label>
+            <a tabindex="0" class="popovericon ml-5" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="if you have a simple drilling file for hinge holes or line bores please download it here... if you have more complex shaped panels that require nested routing, or 3D shapes and 5-axis CNC operations please call us to discuss, we are happy to provide a quote for the service" data-original-title=""><i class="fas fa-info-circle"></i></a>
+            <div class="control">
+                <input id="panel_image" name="image" data-ui-id="adminhtml-panel-edit-tab-main-0-fieldset-element-file-image" value="" title="Image" type="file" class="input-file">
+                
+            </div>
+        </div>
+        <div class="note-information">
+               <p><i>Note: If any of your parts require a shaped CNC trim or drilling please supply a file here and call us to discuss, an additional charge for shaped and drilled panels applies</i></p>
+        </div>
+        <!--<div class="field panel_position required form-group">
+            <label for="panel_position"><?php /* @escapeNotVerified */ echo __('Want to keep your Offcuts?:') ?><span style="color: red;">
+            <?php /* @escapeNotVerified */ echo __('*') ?></span></label>
+            <div class="control">
+                 <select name="panel_position">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                 </select>
+            </div>
+        </div>-->
+         <input type="hidden" name="project_type" value="Normal" />
+        <input type="hidden" name="url_key" value="<?php echo $cusid; ?>" />
+        <input type="hidden" name="customer_name" value="<?php echo $cusname; ?>" />
+        <input type="hidden" name="customer_email" value="<?php echo $cusemail; ?>" />
+        <input type="hidden" name="stores[]" value="0" />
+        
+    
+        <?php echo $block->getChildHtml('form.additional.info'); ?>
+    </fieldset>
+    <div class="actions-toolbar p-0">
+      <div class="secondary">
+            <button type="submit" title="<?php /* @escapeNotVerified */ echo __('Submit') ?>" class="btn form-btn">
+              <?php /* @escapeNotVerified */ echo __('Submit') ?>
+            </button>
+     </div>
+      <?php if($_SERVER['HTTP_REFERER'] !== NULL){ ?>
+          <div class="secondary form-btn-set ml-3"><a class="btn btn-outline-secondary" href="<?php echo $_SERVER['HTTP_REFERER']; ?>" title="Go back">Go Back</a></div>
+          <?php } ?>
+      </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+    require([
+        'jquery',
+        'bootstrap'
+    ], function($){
+        $(function () {
+            $('[data-toggle="popover"]').popover({                
+            container: 'body',
+            delay: 100,
+            placement: 'right',
+            trigger: 'hover'
+            });
+        });
+    });
+</script>
+<style>
+     .popover-body { font-size: 14px; }
+     .popovericon{font-size: 24px}
+</style>
